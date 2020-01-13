@@ -1,0 +1,23 @@
+{
+  "name": "developer-profile-generator",
+  "version": "1.0.0",
+  "description": "github profile pdf",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klangs34/developer-profile-generator.git"
+  },
+  "author": "kelsie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klangs34/developer-profile-generator/issues"
+  },
+  "homepage": "https://github.com/klangs34/developer-profile-generator#readme",
+  "dependencies": {
+    "axios": "^0.19.1",
+    "inquirer": "^7.0.3"
+  }
+}
