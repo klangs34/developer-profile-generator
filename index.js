@@ -2,8 +2,10 @@ const inquirer = require('inquirer');
 const fs = require('fs');
 const util = require('util');
 const axios = require('axios');
+var pdf = require('html-pdf');
 
 const fsWriteAsync = util.promisify(fs.writeFile);
+const fsReadAsync = util.promisify(fs.readFile);
 
 let name;
 
@@ -16,35 +18,31 @@ const githubHeader = {
 
 //const writeFileAsync = util.promisify(fs.writeFile);
 
-function promptUser() {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is your name?"
-    },
-    {
-      type: "input",
-      name: "color",
-      message: "What's your favorit color?"
-    },
-    {
-      type: "input",
-      name: "github",
-      message: "Enter your GitHub Username"
-    }
-  ])
-    .then(response => {
-      let { github, color } = response;
-      name = response.name;
-      //console.log(name)
-      axios.get(`https://api.github.com/users/${github}`, githubHeader)
-        .then(res => {
-          //console.log(res.data)
-          generateHTML(res.data)
-        }
-        )
-    });
+async function promptUser() {
+  try {
+
+    return inquirer.prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "What is your name?"
+      },
+      {
+        type: "input",
+        name: "color",
+        message: "What's your favorit color?"
+      },
+      {
+        type: "input",
+        name: "github",
+        message: "Enter your GitHub Username"
+      }
+    ])
+  } catch (error) {
+
+    console.log(error);
+
+  }
 }
 
 
@@ -58,6 +56,7 @@ function generateHTML(answers) {
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <title>Document</title>
+        <link href="https://fonts.googleapis.com/css?family=Gelasio&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="./index.css">
     </head>
     
@@ -100,7 +99,7 @@ function generateHTML(answers) {
                 </div>
             </div>
         </div>
-        <img src=${answers.avatar_url} alt="">
+        <img class="avatar" src=${answers.avatar_url} alt="github_avatar">
         <footer class="block">
     
         </footer>
@@ -110,11 +109,40 @@ function generateHTML(answers) {
 }
 
 async function init() {
-  //first run the command prompt then wait for response
-  const htmlResults = await promptUser();
-  await fsWriteAsync(`${name}'s_github_profile.pdf`, htmlResults)
-    .then(() => console.log("Profile PDF created Successfully!"))
-    .catch(err => console.log('message: ' + err));
+  try {
+    //first run the inquirer prompt and then await the response
+
+    const { name, color, github } = await promptUser();
+
+    //console.log(name, color, github)
+
+    //await the ajax call to github
+    const { data } = await axios.get(`https://api.github.com/users/${github}`, githubHeader)
+
+    const htmlResults = generateHTML(data);
+
+    //console.log(htmlResults)
+
+    const html = await fsWriteAsync(`${name}'s_github_profile.html`, htmlResults)
+      .then(() => console.log("HTML Profile Created Successfully!"));
+
+    const readHTML = await fsReadAsync(`${name}'s_github_profile.html`, 'utf8');
+
+    var options = {
+      'orientation': 'portrait',
+      "type": "pdf",             // allowed file types: png, jpeg, pdf
+      "quality": "75",
+      "base": "file:///C:/Projects/BootCamp/Homework-9/developer-profile-generator/index.css"
+    };
+
+    pdf.create(readHTML, options).toFile(`./pdfs/${name}'s_github_profile.pdf`, function (err, res) {
+      if (err) return console.log(err);
+      console.log(res); // { filename: '/pdfs/{user_profile}.pdf' }
+    });
+
+  } catch (error) {
+    console.log('message: ' + err);
+  }
 }
 
 init();
