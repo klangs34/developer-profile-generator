@@ -17,14 +17,15 @@ body {
     background-color: blue; 
 }
 
-img {
-    background-color: red;
+.avatar {
+    background-color: white;
     position: absolute;
     width: 300px;
     height: 300px;
     border-radius: 50%;
     left: 40%;
     top: 50px;
+    border: 3px solid yellow;
 }
 
 .group {
@@ -51,4 +52,8 @@ img {
 .info {
     min-width: 300px;
     background-color: blue;
+}
+
+span {
+    color: white;
 }
