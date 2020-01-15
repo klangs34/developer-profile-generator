@@ -198,12 +198,6 @@ async function init() {
       "quality": "75",
       "base": "./index.css"
     };
-
-    // pdf.create(readHTML, options).toFile(`./pdfs/${name}'s_github_profile.pdf`, function (err, res) {
-    //   if (err) return console.log(err);
-    //   console.log(res); // { filename: '/pdfs/{user_profile}.pdf' }
-    // });
-
     
     conversion({ 
       html: readHTML,
