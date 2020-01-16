@@ -140,28 +140,34 @@ function generateHTML(answers, color) {
                 </div>
             </div>
         </div>
-        <div class="spacer d-flex flex-column">
-            <p class="text-center h2 text-dark">${answers.bio}</p>
-            <div class="d-flex flex-row justify-content-around">
-                <div class="info px-5 py-2 border border-dark text-center my-3" style="background-color: ${color};">
-                    <p>Public Repositories</p>
-                    <p>${answers.public_repos}</p>
-                </div>
-                <div class="info px-5 py-2 border border-dark text-center my-3" style="background-color: ${color};">
-                    <p>Followers</p>
-                    <p>${answers.followers}</p>
-                </div>
-            </div>
-            <div class="d-flex flex-row justify-content-around">
-                <div class="info px-5 py-2 border border-dark text-center my-3" style="background-color: ${color};">
-                    <p>GitHub Stars</p>
-                    <p>${answers.starred_url.length}</p>
-                </div>
-                <div class="info px-5 py-2 border border-dark text-center my-3" style="background-color: ${color};">
-                    <p>Following</p>
-                    <p>${answers.following}</p>
-                </div>
-            </div>
+        <div class="container">
+          <div class="spacer d-flex flex-column">
+              <p class="text-center h2 text-dark">${answers.bio}</p>
+              <div class="d-flex flex-row justify-content-center">
+                  <div class="info px-5 py-2 border border-dark text-center my-3" style="background-color: ${color};">
+                      <p>Public Repositories</p>
+                      <p>${answers.public_repos}</p>
+                  </div>
+                    <div style="width: 300px" >
+                    </div>
+                  <div class="info px-5 py-2 border border-dark text-center my-3" style="background-color: ${color};">
+                      <p>Followers</p>
+                      <p>${answers.followers}</p>
+                  </div>
+              </div>
+              <div class="d-flex flex-row justify-content-center">
+                  <div class="info px-5 py-2 border border-dark text-center my-3" style="background-color: ${color};">
+                      <p>GitHub Stars</p>
+                      <p>${answers.starred_url.length}</p>
+                  </div>
+                    <div style="width: 300px" >
+                    </div>
+                  <div class="info px-5 py-2 border border-dark text-center my-3" style="background-color: ${color};">
+                      <p>Following</p>
+                      <p>${answers.following}</p>
+                  </div>
+              </div>
+          </div>
         </div>
         <img class="avatar" src=${answers.avatar_url} alt="github_avatar">
         <footer class="block">
@@ -191,19 +197,12 @@ async function init() {
       .then(() => console.log("HTML Profile Created Successfully!"));
 
     const readHTML = await fsReadAsync(`${name}'s_github_profile.html`, 'utf8');
-
-    var options = {
-      'orientation': 'portrait',
-      "type": "pdf",             // allowed file types: png, jpeg, pdf
-      "quality": "75",
-      "base": "./index.css"
-    };
     
     conversion({ 
       html: readHTML,
       viewportSize: {
-        width: 600,
-        height: 600
+        width: 800,
+        height: 800
     },
     format: {
         quality: 100
